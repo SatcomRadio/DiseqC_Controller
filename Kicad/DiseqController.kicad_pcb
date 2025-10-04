@@ -3028,17 +3028,6 @@
 				)
 			)
 		)
-		(fp_text user "${REFERENCE}"
-			(at -3 -2.95 180)
-			(layer "F.Fab")
-			(uuid "eb3c245f-70dc-46df-9c48-e885c636fdad")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
 		(pad "1" thru_hole roundrect
 			(at -6 0 180)
 			(size 3 3.5)
@@ -3383,6 +3372,7 @@
 		(property "Value" "LED"
 			(at 1.175 -3.4 90)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "b3b17606-41d0-41bd-9c97-41cdceba648a")
 			(effects
 				(font
@@ -3626,6 +3616,7 @@
 		(property "Value" "LED"
 			(at 1.125 -3.4 90)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "778c3564-2db9-4473-9caf-e39ad314f69a")
 			(effects
 				(font
@@ -4037,18 +4028,6 @@
 			(unlocked yes)
 			(layer "F.SilkS")
 			(uuid "e4cfd8a7-214a-421f-a23b-47fc36caeb29")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(fp_text user "${REFERENCE}"
-			(at 21.59 -9.525 180)
-			(unlocked yes)
-			(layer "F.Fab")
-			(uuid "0e66a510-26b2-48d2-bc26-ff203746174b")
 			(effects
 				(font
 					(size 1 1)
@@ -8059,6 +8038,7 @@
 		(property "Value" "Conn_01x02_Socket"
 			(at -2.9 1.575 180)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "826a4ebb-cbbf-48a6-9842-65b684411fd9")
 			(effects
 				(font
@@ -8260,17 +8240,6 @@
 			)
 			(layer "F.Fab")
 			(uuid "6a4b5a06-2afe-47f5-8900-caec3a0fe30f")
-		)
-		(fp_text user "${REFERENCE}"
-			(at 0 1.27 180)
-			(layer "F.Fab")
-			(uuid "376e0061-1939-457f-9589-232853ad3cfe")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
 		)
 		(pad "1" thru_hole rect
 			(at 0 0 90)
@@ -8876,6 +8845,66 @@
 				(bold yes)
 			)
 			(justify bottom mirror)
+		)
+	)
+	(gr_text "- +"
+		(at 98 73.278572 90)
+		(layer "F.SilkS")
+		(uuid "06ee541b-a0b1-40d7-b9db-fc7d07ae46c1")
+		(effects
+			(font
+				(size 1.5 1.5)
+				(thickness 0.15)
+			)
+			(justify left bottom)
+		)
+	)
+	(gr_text "LED R"
+		(at 91.5 73.138096 90)
+		(layer "F.SilkS")
+		(uuid "45333f5b-034d-4da6-80dc-c197d750d5de")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+			(justify left bottom)
+		)
+	)
+	(gr_text "MOTOR PWR"
+		(at 138.216369 113.5 0)
+		(layer "F.SilkS")
+		(uuid "4f909521-7b01-4286-b08f-7d3e9a11e4a9")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.1875)
+			)
+			(justify left bottom)
+		)
+	)
+	(gr_text "- +"
+		(at 98 67.178572 90)
+		(layer "F.SilkS")
+		(uuid "796cad50-85c0-4b04-a5e6-ed610f353448")
+		(effects
+			(font
+				(size 1.5 1.5)
+				(thickness 0.15)
+			)
+			(justify left bottom)
+		)
+	)
+	(gr_text "LED G"
+		(at 91.5 67.000596 90)
+		(layer "F.SilkS")
+		(uuid "de543102-c247-4068-871e-e10af82d4ce9")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+			(justify left bottom)
 		)
 	)
 	(segment
