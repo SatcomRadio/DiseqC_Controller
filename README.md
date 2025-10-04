@@ -40,7 +40,11 @@ When there's no wifi configured, the ESP32 will create it's own access point. Co
 
 If you setup the ESP32 to connect to your wifi, check the IP address on your modem page.
 
-<img src="./img/website.png" alt="website" width="600"/>
+<img src="./img/website.png" alt="website" width="300"/>
+
+You can also send an angle using a POST to the following API:
+
+<img src="./img/api.png" alt="website" width="600"/>
 
 ----
 
