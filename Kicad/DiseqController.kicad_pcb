@@ -1856,7 +1856,7 @@
 				)
 			)
 		)
-		(property "Value" "LM741"
+		(property "Value" "TLC081"
 			(at 3.795 3.945 0)
 			(layer "F.SilkS")
 			(uuid "2a454cff-df6d-44b5-9e73-1bc203462bca")
@@ -2061,17 +2061,6 @@
 			)
 			(layer "F.Fab")
 			(uuid "8d32dc22-55d2-4cc2-a47e-87cff08a1fd7")
-		)
-		(fp_text user "${REFERENCE}"
-			(at 3.81 3.81 -90)
-			(layer "F.Fab")
-			(uuid "ca77064a-24dc-44e4-be10-54716396fb38")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
 		)
 		(pad "1" thru_hole rect
 			(at 0 0 270)

@@ -3,9 +3,11 @@ Controller board based on a ESP32 to control DiseqC rotors
 
 ### This repo is a work in progress! Eveything is subject to change!
 
-<img src="./img/render.png" alt="render" width="600"/>
+<img src="./img/render.png" alt="render" width="400"/>
 
-<img src="./img/built.png" alt="built" width="600"/>
+<img src="./img/built.png" alt="built" width="400"/>
+
+<img src="./img/circuit.png" alt="built" width="400"/>
 
 #### Please make sure to visit the [satcom radio website](https://satcomradio.github.io/)
 
