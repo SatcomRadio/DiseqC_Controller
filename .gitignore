@@ -1,0 +1,10 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/Kicad/DiseqController-backups
+/Kicad/jlcpcb
+/Nanoframework/.vs/DiseqC
+/Nanoframework/DiseqC/bin/Debug
+/Nanoframework/DiseqC/obj/Debug
+/Nanoframework/packages
