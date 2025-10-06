@@ -11,13 +11,37 @@ namespace DiseqC.Manager
     internal class WiFiConnectionManager
     {
         private readonly StatusLedManager _statusLed;
+        private readonly AccessPointManager _apMgr;
 
-        public WiFiConnectionManager(StatusLedManager statusLed)
+        public WiFiConnectionManager(StatusLedManager statusLed, AccessPointManager apMgr)
         {
             _statusLed = statusLed;
+            _apMgr = apMgr;
         }
 
-        public bool TryConnect(int timeoutMilliseconds)
+        public bool ConnectOrStartAccessPoint()
+        {
+            Debug.WriteLine("Starting WiFiManager...");
+            var wifiConnected = TryConnect(30000);
+            if (wifiConnected)
+            {
+                Debug.WriteLine("WiFi connected successfully.");
+                var ni = NetworkInterface.GetAllNetworkInterfaces()[0];
+                Debug.WriteLine($"IP address: {ni.IPv4Address}");
+                _apMgr.DisableAccessPoint();
+                return true;
+            }
+
+            Debug.WriteLine("WiFi connection failed.");
+            if (WifiNetworkHelper.HelperException != null)
+            {
+                Debug.WriteLine($"Error: {WifiNetworkHelper.HelperException.Message}");
+            }
+
+            return _apMgr.SetupAccessPoint();
+        }
+        
+        private bool TryConnect(int timeoutMilliseconds)
         {
             _statusLed.Blink(50);
             using var cs = new CancellationTokenSource(timeoutMilliseconds);
@@ -89,7 +113,6 @@ namespace DiseqC.Manager
             wConf.SaveConfiguration();
 
             WifiNetworkHelper.Disconnect();
-
             var success = WifiNetworkHelper.ConnectDhcp(ssid, password, WifiReconnectionKind.Automatic, true, token: token);
             if (!success)
             {

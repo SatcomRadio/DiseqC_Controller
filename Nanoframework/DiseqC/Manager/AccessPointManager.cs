@@ -24,12 +24,14 @@ namespace DiseqC.Manager
             CaptivePortalUrl = $"http://{ApIp}"
         };
 
-        public void DisableAccessPoint()
+        public void DisableAccessPoint(bool reboot = false)
         {
             var apConf = GetConfiguration();
             apConf.Options = WirelessAPConfiguration.ConfigurationOptions.None;
             apConf.SaveConfiguration();
-            Power.RebootDevice();
+
+            if (reboot)
+                Power.RebootDevice();
         }
 
         public bool SetupAccessPoint()
@@ -39,27 +41,9 @@ namespace DiseqC.Manager
             try
             {
                 _statusLed.Blink();
-                if (!IsApEnabled())
+                if (!IsApModeEnabled())
                 {
-                    var networkIfc = WirelessHelper.GetInterface(NetworkInterfaceType.WirelessAP);
-                    networkIfc.EnableStaticIPv4(ApIp, "255.255.255.0", ApIp);
-
-                    var apConfig = new WirelessAPConfiguration(0)
-                    {
-                        Options = WirelessAPConfiguration.ConfigurationOptions.Enable,
-                        Ssid = $"DISEQc Controller {networkIfc.PhysicalAddress[networkIfc.PhysicalAddress.Length-1]:X2}",
-                        Password = "",
-                        Channel = 6,
-                        MaxConnections = 4,
-                        Authentication = AuthenticationType.Open,
-                        Encryption = EncryptionType.None,
-                        Radio = RadioType._802_11g,
-                        
-                    };
-                    apConfig.SaveConfiguration();
-                    Debug.WriteLine("AP configuration saved successfully. AP mode is now active. Rebooting");
-                    Power.RebootDevice();
-                    return true;
+                    EnableAccessPoint(true);
                 }
 
                 SetupDhcp();
@@ -67,6 +51,43 @@ namespace DiseqC.Manager
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error saving AP configuration: {ex.Message}");
+            }
+
+            return false;
+        }
+
+        public void EnableAccessPoint(bool reboot = false)
+        {
+            var networkIfc = WirelessHelper.GetInterface(NetworkInterfaceType.WirelessAP);
+            networkIfc.EnableStaticIPv4(ApIp, "255.255.255.0", ApIp);
+            var apConfig = new WirelessAPConfiguration(0)
+            {
+                Options = WirelessAPConfiguration.ConfigurationOptions.Enable,
+                Ssid = $"DISEQc Controller {networkIfc.PhysicalAddress[networkIfc.PhysicalAddress.Length - 1]:X2}",
+                Password = "",
+                Channel = 6,
+                MaxConnections = 4,
+                Authentication = AuthenticationType.Open,
+                Encryption = EncryptionType.None,
+                Radio = RadioType._802_11g,
+            };
+            apConfig.SaveConfiguration();
+            SetupDhcp();
+
+            if (reboot)
+                Power.RebootDevice();
+        }
+
+        public bool IsApModeEnabled()
+        {
+            var ni = WirelessHelper.GetInterface(NetworkInterfaceType.WirelessAP);
+            var wirelessConf = GetConfiguration();
+
+            if (ni.IPv4Address == ApIp &&
+                (wirelessConf.Options == WirelessAPConfiguration.ConfigurationOptions.Enable ||
+                 wirelessConf.Options == WirelessAPConfiguration.ConfigurationOptions.AutoStart))
+            {
+                return true;
             }
 
             return false;
@@ -80,21 +101,6 @@ namespace DiseqC.Manager
                 Console.WriteLine("Error initializing DHCP server.");
                 Power.RebootDevice();
             }
-        }
-
-        private static bool IsApEnabled()
-        {
-            var ni = WirelessHelper.GetInterface(NetworkInterfaceType.WirelessAP);
-            var wirelessConf = GetConfiguration();
-
-            if (ni.IPv4Address == ApIp &&
-                (wirelessConf.Options == WirelessAPConfiguration.ConfigurationOptions.Enable ||
-                 wirelessConf.Options == WirelessAPConfiguration.ConfigurationOptions.AutoStart))
-            {
-                return true;
-            }
-
-            return false;
         }
 
         private static WirelessAPConfiguration GetConfiguration()

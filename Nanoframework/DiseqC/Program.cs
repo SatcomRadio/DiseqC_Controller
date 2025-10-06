@@ -1,13 +1,10 @@
-using Microsoft.Extensions.DependencyInjection;
-using nanoFramework.Networking;
-using nanoFramework.WebServer;
 using DiseqC.Controllers;
 using DiseqC.Manager;
 using DiseqC.Manager.Led;
+using Microsoft.Extensions.DependencyInjection;
+using nanoFramework.WebServer;
 using System;
 using System.Device.Gpio;
-using System.Diagnostics;
-using System.Net.NetworkInformation;
 using System.Threading;
 
 namespace DiseqC
@@ -53,26 +50,7 @@ namespace DiseqC
             var services = ConfigureServices();
 
             var connectionMgr = (WiFiConnectionManager)services.GetRequiredService(typeof(WiFiConnectionManager));
-
-            Debug.WriteLine("Starting WiFiManager...");
-            var wifiConnected = connectionMgr.TryConnect(100000);
-            if (wifiConnected)
-            {
-                Debug.WriteLine("WiFi connected successfully.");
-                var ni = NetworkInterface.GetAllNetworkInterfaces()[0];
-                Debug.WriteLine($"IP address: {ni.IPv4Address}");
-            }
-            else
-            {
-                Debug.WriteLine("WiFi connection failed.");
-                if (WifiNetworkHelper.HelperException != null)
-                {
-                    Debug.WriteLine($"Error: {WifiNetworkHelper.HelperException.Message}");
-                }
-
-                var apMgr = (AccessPointManager)services.GetRequiredService(typeof(AccessPointManager));
-                apMgr.SetupAccessPoint();
-            }
+            connectionMgr.ConnectOrStartAccessPoint();
 
             using var webServer = new DiseqcWebServer(80, HttpProtocol.Http, new Type[] { typeof(DiseqcApiController), typeof(WifiSetupController), typeof(WebsiteController) }, services);
             webServer.Start();
