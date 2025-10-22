@@ -1,5 +1,6 @@
-﻿using nanoFramework.WebServer;
-using DiseqC.Manager;
+﻿using DiseqC.Manager;
+using nanoFramework.Runtime.Native;
+using nanoFramework.WebServer;
 using System.Diagnostics;
 
 namespace DiseqC.Controllers
@@ -20,11 +21,14 @@ namespace DiseqC.Controllers
             Debug.WriteLine($"Wireless parameters SSID:{ssid} PASSWORD:{password}");
 
             e.Context.Response.ContentType = "text/plain";
-            WebServer.OutPutStream(e.Context.Response, "New settings saved. Rebooting device to put into normal mode");
+            WebServer.OutPutStream(e.Context.Response, "New settings saved. Rebooting device");
 
             WiFiConnectionManager.SaveConfiguration(ssid, password);
 
-            _apMgr.DisableAccessPoint();
+            if (_apMgr.IsApModeEnabled())
+                _apMgr.DisableAccessPoint(true);
+            else
+                Power.RebootDevice();
         }
     }
 }

@@ -1,10 +1,8 @@
 ﻿using nanoFramework.Hardware.Esp32;
+using nanoFramework.Hardware.Esp32.Rmt;
 using DiseqC.Manager.Led;
 using System;
-using System.Device;
 using System.Device.Gpio;
-using System.Device.Pwm;
-using System.IO.Ports;
 using System.Threading;
 
 namespace DiseqC.Manager
@@ -16,32 +14,29 @@ namespace DiseqC.Manager
         private const int Frequency = 22000;
         private const int MaxAngle = 80;
         private const int DataPin = 0;
-        private const int Resolution = 8;
 
-        //private readonly int _ticks1000Us = (int)TimeSpan.FromTicks(1000 * TimeSpan.TicksPerMillisecond / 1000).Ticks;
-        //private readonly int _ticks500Us = (int)TimeSpan.FromTicks(500 * TimeSpan.TicksPerMillisecond / 1000).Ticks;
-
-        private readonly int _ticks1000Us = int.MaxValue - 1;
-        private readonly int _ticks500Us = int.MaxValue - 1;
-
-        private readonly PwmChannel _pwm;
         private readonly MotorLedManager _motorLed;
         private Thread _ledThread;
+        private readonly TransmitterChannel _txChannel;
 
         public RotorManager(MotorLedManager motorLed)
         {
             _motorLed = motorLed;
             Configuration.SetPinFunction(DataPin, DeviceFunction.PWM1);
-            _pwm = PwmChannel.CreateFromPin(DataPin, Frequency);
-        }
 
+            var txChannelSettings = new TransmitChannelSettings(pinNumber: DataPin)
+            {
+                ClockDivider = 80,
+                EnableCarrierWave = true,
+                IdleLevel = false,
+                CarrierWaveFrequency = Frequency
+            };
+
+            _txChannel = new TransmitterChannel(txChannelSettings);
+        }
+        
         public void GotoAngle(float angle, int expectedTravelTimeSec)
         {
-            _pwm.Start();
-            Thread.Sleep(1);
-            _pwm.Stop();
-            Thread.Sleep(50);
-
             CurrentAngle = angle;
 
             angle = angle switch
@@ -60,12 +55,13 @@ namespace DiseqC.Manager
             var d2 = (byte)(a16 & 0xFF);
             var d1 = (byte)(n1 | n2);
 
-            // send the command sequence to the positioner
+            _txChannel.ClearCommands();
             WriteByteWithParity(0xE0);
             WriteByteWithParity(0x31);
             WriteByteWithParity(0x6E);
             WriteByteWithParity(d1);
             WriteByteWithParity(d2);
+            _txChannel.Send(true);
         }
 
         private void SetMotorLed(int travelTimeSec)
@@ -75,7 +71,7 @@ namespace DiseqC.Manager
                 _ledThread.Abort();
                 _ledThread.Join();
             }
-            
+
             _ledThread = new Thread(() =>
             {
                 _motorLed.SetState(PinValue.High);
@@ -87,32 +83,12 @@ namespace DiseqC.Manager
 
         private void Write0()
         {
-            _pwm.Start();
-            for (var i = 0; i < 130; i++)
-            {
-                //Do nothing
-            }
-
-            _pwm.Stop();
-            for (var i = 0; i < 60; i++)
-            {
-                //Do nothing
-            }
+            _txChannel.AddCommand(new RmtCommand(1000, true, 500, false));
         }
 
         private void Write1()
         {
-            _pwm.Start();
-            for (var i = 0; i < 60; i++)
-            {
-                //Do nothing
-            }
-
-            _pwm.Stop();
-            for (var i = 0; i < 130; i++)
-            {
-                //Do nothing
-            }
+            _txChannel.AddCommand(new RmtCommand(500, true, 1000, false));
         }
 
         private void WriteByteWithParity(byte x)
@@ -124,9 +100,9 @@ namespace DiseqC.Manager
         private void WriteParity(byte x)
         {
             if (ParityHelper.ParityEvenBit(x) == ParityHelper.Parity.EVEN)
-                Write0();
-            else
                 Write1();
+            else
+                Write0();
         }
 
         private void WriteByte(byte x)

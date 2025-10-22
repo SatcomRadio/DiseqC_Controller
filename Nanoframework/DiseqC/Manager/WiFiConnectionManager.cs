@@ -19,10 +19,10 @@ namespace DiseqC.Manager
             _apMgr = apMgr;
         }
 
-        public bool ConnectOrStartAccessPoint()
+        public bool ConnectOrStartAccessPoint(TimeSpan connectionTimeout)
         {
             Debug.WriteLine("Starting WiFiManager...");
-            var wifiConnected = TryConnect(30000);
+            var wifiConnected = TryConnect(connectionTimeout);
             if (wifiConnected)
             {
                 Debug.WriteLine("WiFi connected successfully.");
@@ -41,10 +41,10 @@ namespace DiseqC.Manager
             return _apMgr.SetupAccessPoint();
         }
         
-        private bool TryConnect(int timeoutMilliseconds)
+        private bool TryConnect(TimeSpan connectionTimeout)
         {
             _statusLed.Blink(50);
-            using var cs = new CancellationTokenSource(timeoutMilliseconds);
+            using var cs = new CancellationTokenSource((int)connectionTimeout.TotalMilliseconds);
             try
             {
                 var configurations = Wireless80211Configuration.GetAllWireless80211Configurations();

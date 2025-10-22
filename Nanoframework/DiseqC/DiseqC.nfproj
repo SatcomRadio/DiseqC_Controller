@@ -23,7 +23,7 @@
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
-    <Compile Include="Manager\RmtRotorManager.cs" />
+    <Compile Include="Manager\RotorManager.cs" />
     <Compile Include="ParityHelper.cs" />
     <Compile Include="Controllers\WebsiteController.cs" />
     <Compile Include="Manager\AccessPointManager.cs" />
@@ -35,7 +35,6 @@
     <Compile Include="Manager\Led\LedManager.cs" />
     <Compile Include="Manager\Led\MotorLedManager.cs" />
     <Compile Include="Manager\Led\StatusLedManager.cs" />
-    <Compile Include="Manager\RotorManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">

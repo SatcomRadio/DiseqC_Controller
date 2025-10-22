@@ -7,8 +7,8 @@ namespace DiseqC.Controllers
     internal class DiseqcApiController
     {
         private readonly RotorManager _rotorMgr;
-        private readonly RmtRotorManager _rmtRotorMgr;
-        public DiseqcApiController(RotorManager rotorMgr, RmtRotorManager rmtRotorMgr)
+        private readonly RotorManager _rmtRotorMgr;
+        public DiseqcApiController(RotorManager rotorMgr, RotorManager rmtRotorMgr)
         {
             _rotorMgr = rotorMgr;
             _rmtRotorMgr = rmtRotorMgr;
