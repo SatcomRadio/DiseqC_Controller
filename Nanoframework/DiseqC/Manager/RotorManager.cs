@@ -15,13 +15,15 @@ namespace DiseqC.Manager
         private const int MaxAngle = 80;
         private const int DataPin = 0;
 
-        private readonly MotorLedManager _motorLed;
         private Thread _ledThread;
+        private readonly MotorLedManager _motorLed;
+        private readonly MotorEnablerManager _motorEnabler;
         private readonly TransmitterChannel _txChannel;
 
-        public RotorManager(MotorLedManager motorLed)
+        public RotorManager(GpioController gpioController, MotorLedManager motorLed, MotorEnablerManager motorEnabler)
         {
             _motorLed = motorLed;
+            _motorEnabler = motorEnabler;
             Configuration.SetPinFunction(DataPin, DeviceFunction.PWM1);
 
             var txChannelSettings = new TransmitChannelSettings(pinNumber: DataPin)
@@ -34,9 +36,10 @@ namespace DiseqC.Manager
 
             _txChannel = new TransmitterChannel(txChannelSettings);
         }
-        
+
         public void GotoAngle(float angle, int expectedTravelTimeSec)
         {
+            _motorEnabler.TurnOnMotor(expectedTravelTimeSec);
             CurrentAngle = angle;
 
             angle = angle switch
@@ -69,7 +72,7 @@ namespace DiseqC.Manager
             if (_ledThread != null && _ledThread.IsAlive)
             {
                 _ledThread.Abort();
-                _ledThread.Join();
+                _ledThread = null;
             }
 
             _ledThread = new Thread(() =>

@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.IO;
-using System.Net.NetworkInformation;
-using System.Text;
-using System.Web;
+﻿using System.Net.NetworkInformation;
 
 namespace DiseqC
 {

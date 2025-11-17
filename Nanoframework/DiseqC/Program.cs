@@ -17,10 +17,12 @@ namespace DiseqC
                 .AddSingleton(typeof(GpioController))
                 .AddSingleton(typeof(StatusLedManager))
                 .AddSingleton(typeof(MotorLedManager))
+                .AddSingleton(typeof(MotorEnabledLedManager))
                 .AddSingleton(typeof(AccessPointManager))
                 .AddSingleton(typeof(WiFiConnectionManager))
                 .AddSingleton(typeof(RotorManager))
-                .AddSingleton(typeof(RotorManager))
+                .AddSingleton(typeof(ButtonManager))
+                .AddSingleton(typeof(MotorEnablerManager))
                 .AddSingleton(typeof(DiseqcApiController))
                 .AddSingleton(typeof(WifiSetupController))
                 .AddSingleton(typeof(WebsiteController))
@@ -46,6 +48,11 @@ namespace DiseqC
         {
             //Test();
             var services = ConfigureServices();
+
+
+            var btnMgr = (ButtonManager)services.GetRequiredService(typeof(ButtonManager));
+            btnMgr.MonitorButtonPresses();
+            btnMgr.DebugPot();
 
             var connectionMgr = (WiFiConnectionManager)services.GetRequiredService(typeof(WiFiConnectionManager));
             connectionMgr.ConnectOrStartAccessPoint(TimeSpan.FromSeconds(30));

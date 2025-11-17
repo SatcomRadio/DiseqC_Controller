@@ -23,6 +23,9 @@
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
+    <Compile Include="Manager\ButtonManager.cs" />
+    <Compile Include="Manager\Led\MotorEnabledLedManager.cs" />
+    <Compile Include="Manager\MotorEnablerManager.cs" />
     <Compile Include="Manager\RotorManager.cs" />
     <Compile Include="ParityHelper.cs" />
     <Compile Include="Controllers\WebsiteController.cs" />

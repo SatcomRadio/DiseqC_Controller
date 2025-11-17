@@ -36,7 +36,7 @@ namespace DiseqC.Manager.Led
 
             if (_blinkThread != null && _blinkThread.IsAlive)
             {
-                _blinkThread.Join();
+                _blinkThread.Abort();
                 _blinkThread = null;
             }
 
