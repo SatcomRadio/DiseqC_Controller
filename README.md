@@ -35,18 +35,37 @@ If you only want to flash the Diseq controller to your ESP32:
 
 ### General info
 
-Before connecting the rotor, ADJUST THE VOLTAGE to around 18v max!
+Before connecting the rotor, ADJUST THE VOLTAGE to around 18v max!  
+To do so, send the command to move the rotor, monitor the voltage in the SMA output and adjust the trimmer.
 
-When there's no wifi configured, the ESP32 will create it's own access point. Connect to it and use the rotor controller at:
+When turning the controller on the status led will flash fast to indicate that it's trying to connect to your wifi.
+
+When there's no wifi configured or it didn't managed to connect, the ESP32 will create it's own access point and the led will flash slowly.  
+Connect to it and use the rotor controller at:
 `http://192.168.5.1`
 
-If you setup the ESP32 to connect to your wifi, check the IP address on your modem page.
+If the controller manages to connect to your wifi, the status led will be on continuously.  
+Check it's IP address on your modem page.
 
 <img src="./img/website.png" alt="website" width="300"/>
 
 You can also send an angle using a POST to the following API:
 
 <img src="./img/api.png" alt="website" width="600"/>
+
+The potentiometer works in intervals of 20º. It's not linear due to limitations of the ESP32
+You can check the current value on the website and mark it down with a pen in the metal case.
+
+----
+
+### Construction:
+
+Make sure to trim the solder fillets at the bottom of the step up converter. 
+It's the only difficult part to sodler as you need that it makes a good contact with the tabs at the bottom
+
+<img src="./img/step_up.png" alt="stepup" width="500"/>
+
+Fold the leds before soldering them as shown in previous pictures.
 
 ----
 
@@ -56,3 +75,29 @@ Download the Gerber file from this repo and order it a jlcpcb with the default o
 The only option I've changed is to remove the manufacture code mark
 
 <img src="./img/jlcpcb.png" alt="jlcpcb" width="500"/>
+
+----
+
+### BOM:
+
+- [80x32x32 mm case](https://aliexpress.com/item/1005005484479479.html)
+- [ESP32 C3 super mini with antenna port](https://aliexpress.com/item/1005007785335513.html)
+- [SMA Edge connector](https://aliexpress.com/item/1005007013777316.html)
+- [UFL pigtail](https://aliexpress.com/item/1005009270045616.html)
+- 2.54mm Header pins (usually included with the ESP32)
+- 0805 capacitor 10u
+- 0805 capacitor 4.7n
+- 0805 capacitor 47n
+- 0805 capacitor 10u
+- 0805 resistor 4k7
+- 0805 resistor 100
+- 0805 resistor 50
+- 0805 resistor 10k
+- 0805 resistor 150
+- 0805 resistor 20
+- [12x12 1m CDRH125 inductor](https://aliexpress.com/item/1005002743197146.html)
+- [3mm 3v led](https://aliexpress.com/item/1005006269054479.html)
+- [AO4484](https://aliexpress.com/item/1005009121264682.html)
+- [TL081CDR](https://aliexpress.com/item/1005007336116897.html)
+- [MT-3608 Step up module](https://aliexpress.com/item/1005007723986240.html)
+- [10k potentiometer with button](https://aliexpress.com/item/1005009506482081.html)
