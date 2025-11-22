@@ -7,11 +7,11 @@ namespace DiseqC.Controllers
     internal class DiseqcApiController
     {
         private readonly RotorManager _rotorMgr;
-        private readonly RotorManager _rmtRotorMgr;
-        public DiseqcApiController(RotorManager rotorMgr, RotorManager rmtRotorMgr)
+        private readonly ButtonManager _btnMgr;
+        public DiseqcApiController(RotorManager rotorMgr, ButtonManager btnMgr)
         {
             _rotorMgr = rotorMgr;
-            _rmtRotorMgr = rmtRotorMgr;
+            _btnMgr = btnMgr;
         }
 
         [Route("angle")]
@@ -23,7 +23,7 @@ namespace DiseqC.Controllers
             {
                 Debug.WriteLine($"Requested angle: {angle}");
                 //_rotorMgr.GotoAngle(angle, 5);
-                _rmtRotorMgr.GotoAngle(angle, 5);
+                _rotorMgr.GotoAngle(angle, 5);
             }
             else
             {
@@ -32,6 +32,15 @@ namespace DiseqC.Controllers
             }
 
             WebServer.OutPutStream(e.Context.Response, Resources.GetString(Resources.StringResources.webpage));
+        }
+
+
+        [Route("pot")]
+        [Method("GET")]
+        public void GetPotValue(WebServerEventArgs e)
+        {
+            var angle = _btnMgr.GetPotentiometerAngle();
+            WebServer.OutPutStream(e.Context.Response, angle.ToString());
         }
     }
 }

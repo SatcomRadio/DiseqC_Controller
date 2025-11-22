@@ -33,13 +33,18 @@ namespace DiseqC
         {
             var services = ConfigureServices();
             var mgr = (RotorManager)services.GetRequiredService(typeof(RotorManager));
+            var ledMot = (MotorLedManager)services.GetRequiredService(typeof(MotorLedManager));
+            var ledStatus = (StatusLedManager)services.GetRequiredService(typeof(StatusLedManager));
+
+            ledMot.SetState(PinValue.High);
+            ledStatus.SetState(PinValue.High);
 
             while (true)
             {
                 mgr.GotoAngle(10, 5);
-                Thread.Sleep(5000);
+                Thread.Sleep(7000);
                 mgr.GotoAngle(0, 5);
-                Thread.Sleep(5000);
+                Thread.Sleep(7000);
             }
 
         }
@@ -49,10 +54,8 @@ namespace DiseqC
             //Test();
             var services = ConfigureServices();
 
-
             var btnMgr = (ButtonManager)services.GetRequiredService(typeof(ButtonManager));
             btnMgr.MonitorButtonPresses();
-            btnMgr.DebugPot();
 
             var connectionMgr = (WiFiConnectionManager)services.GetRequiredService(typeof(WiFiConnectionManager));
             connectionMgr.ConnectOrStartAccessPoint(TimeSpan.FromSeconds(30));

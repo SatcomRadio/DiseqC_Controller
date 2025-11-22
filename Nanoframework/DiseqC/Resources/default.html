@@ -32,11 +32,17 @@
             font-size: medium;
         }
 
-            input[type=submit]:hover {
-                cursor: pointer;
-                background-color: hsl(0, 0%, 90%);
-                transition: 0.5s;
-            }
+        input[type=submit]:hover {
+            cursor: pointer;
+            background-color: hsl(0, 0%, 90%);
+            transition: 0.5s;
+        }
+
+        input[type=button]:hover {
+            cursor: pointer;
+            background-color: hsl(0, 0%, 90%);
+            transition: 0.5s;
+        }
 
         #error {
             color: red;
@@ -60,23 +66,30 @@
 <body>
     <h1>&#x1F3F4;&#x200D;&#x2620;&#xFE0F; DiSEqC Controller &#x1F3F4;&#x200D;&#x2620;&#xFE0F;</h1>
 
-    <form id="angleForm">
-        <fieldset>
-            <legend>Diseqc controller!</legend>
-            Angle:<br><input type="number"
-                             id="angle"
-                             name="angle"
-                             step="1"
-                             placeholder="e.g., -45 or 90"><br>
-            <br>
-            <input type="submit" value="Set angle">
-        </fieldset>
+<form id="angleForm">
+    <fieldset>
+        <legend>Diseqc controller!</legend>
+        Angle:<br><input type="number"
+                         id="angle"
+                         name="angle"
+                         step="1"
+                         placeholder="e.g., -45 or 90"><br>
+        <br>
+        <input type="submit" value="Set angle">
+    </fieldset>
 
-        <h1 id="error">Please enter a valid integer (positive or negative)</h1>
-        <h1 id="ok">Moving the rotor!</h1>
-    </form>
+    <h1 id="error">Please enter a valid integer (positive or negative)</h1>
+    <h1 id="ok">Moving the rotor!</h1>
+</form>
 
-    <form method='POST' action="/wifi">
+<fieldset>
+    <legend>Potentiometer</legend>
+    Current Angle:<br>
+    <input type="number" id="pot_angle" name="pot_angle" disabled><br><br>
+    <input type="button" id="readPot" value="Read Potentiometer">
+</fieldset>
+
+<form method='POST' action="/wifi">
         <fieldset>
             <legend>Wireless configuration</legend>
             Ssid:<br><input type="text" name="ssid" value=""><br>

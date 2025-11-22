@@ -52,4 +52,25 @@
             }
         });
     }
+
+    // --- Read potentiometer once when clicking the button ---
+    const potInput = document.getElementById("pot_angle");
+    const readPotButton = document.getElementById("readPot");
+
+    if (readPotButton) {
+        readPotButton.addEventListener("click", async () => {
+            try {
+                let response = await fetch("/pot", { method: "GET" });
+                if (!response.ok) return;
+
+                let text = await response.text();
+
+                if (!isNaN(text)) {
+                    potInput.value = parseFloat(text);
+                }
+            } catch (err) {
+                console.error("Failed to fetch potentiometer angle:", err);
+            }
+        });
+    }
 });

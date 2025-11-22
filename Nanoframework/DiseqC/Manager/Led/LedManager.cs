@@ -10,6 +10,7 @@ namespace DiseqC.Manager.Led
         private bool _blink;
         private int _intervalMs;
         private Thread _blinkThread;
+        private Thread _duringThread;
 
         protected LedManager(GpioPin pin, bool reverseState = false)
         {
@@ -28,6 +29,41 @@ namespace DiseqC.Manager.Led
 
             _blinkThread = new Thread(BlinkLoop);
             _blinkThread.Start();
+        }
+        
+        public void TurnOnDuring(int lengthInMs, int intervalMs = 500)
+        {
+            if (_duringThread != null && _duringThread.IsAlive)
+            {
+                _duringThread.Abort();
+                _duringThread = null;
+            }
+
+            _duringThread = new Thread(() =>
+            {
+                SetState(true);
+                Thread.Sleep(lengthInMs);
+                SetState(false);
+            });
+            _duringThread.Start();
+        }
+
+        public void BlinkDuring(int lengthInMs, int intervalMs = 500)
+        {
+            if (_duringThread != null && _duringThread.IsAlive)
+            {
+                _duringThread.Abort();
+                _duringThread = null;
+            }
+
+            _duringThread = new Thread(() =>
+            {
+                Blink(intervalMs);
+
+                Thread.Sleep(lengthInMs);
+                SetState(false);
+            });
+            _duringThread.Start();
         }
 
         public void SetState(PinValue value)

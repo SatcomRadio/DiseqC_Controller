@@ -15,7 +15,6 @@ namespace DiseqC.Manager
         private const int MaxAngle = 80;
         private const int DataPin = 0;
 
-        private Thread _ledThread;
         private readonly MotorLedManager _motorLed;
         private readonly MotorEnablerManager _motorEnabler;
         private readonly TransmitterChannel _txChannel;
@@ -49,7 +48,7 @@ namespace DiseqC.Manager
                 _ => angle
             };
 
-            SetMotorLed(expectedTravelTimeSec);
+            _motorLed.BlinkDuring(expectedTravelTimeSec * 1000);
 
             var n1 = angle < 0 ? (byte)0xE0 : (byte)0xD0;
 
@@ -65,23 +64,6 @@ namespace DiseqC.Manager
             WriteByteWithParity(d1);
             WriteByteWithParity(d2);
             _txChannel.Send(true);
-        }
-
-        private void SetMotorLed(int travelTimeSec)
-        {
-            if (_ledThread != null && _ledThread.IsAlive)
-            {
-                _ledThread.Abort();
-                _ledThread = null;
-            }
-
-            _ledThread = new Thread(() =>
-            {
-                _motorLed.SetState(PinValue.High);
-                Thread.Sleep(TimeSpan.FromSeconds(travelTimeSec));
-                _motorLed.SetState(PinValue.Low);
-            });
-            _ledThread.Start();
         }
 
         private void Write0()
