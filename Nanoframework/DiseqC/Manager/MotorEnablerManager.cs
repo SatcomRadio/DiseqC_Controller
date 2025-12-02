@@ -22,11 +22,18 @@ namespace DiseqC.Manager
             _motorEnablePin.Write(PinValue.Low);
         }
 
-        public void TurnOnMotorForever()
+        public void StartTracking()
         {
             _motorEnableForever = true;
             _motorEnablePin.Write(PinValue.High);
             _ledMgr.SetState(PinValue.High);
+        }
+
+        public void StopTracking()
+        {
+            _motorEnableForever = false;
+            _motorEnablePin.Write(PinValue.Low);
+            _ledMgr.SetState(PinValue.Low);
         }
 
         public void TurnOnMotor(int expectedTravelTimeSec)

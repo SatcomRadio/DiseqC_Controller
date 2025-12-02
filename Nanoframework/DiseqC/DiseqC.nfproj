@@ -27,6 +27,7 @@
     <Compile Include="Manager\Led\MotorEnabledLedManager.cs" />
     <Compile Include="Manager\MotorEnablerManager.cs" />
     <Compile Include="Manager\RotorManager.cs" />
+    <Compile Include="Manager\SocketMotorManager.cs" />
     <Compile Include="ParityHelper.cs" />
     <Compile Include="Controllers\WebsiteController.cs" />
     <Compile Include="Manager\AccessPointManager.cs" />

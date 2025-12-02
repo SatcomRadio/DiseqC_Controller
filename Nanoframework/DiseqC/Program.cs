@@ -20,6 +20,7 @@ namespace DiseqC
                 .AddSingleton(typeof(MotorEnabledLedManager))
                 .AddSingleton(typeof(AccessPointManager))
                 .AddSingleton(typeof(WiFiConnectionManager))
+                .AddSingleton(typeof(SocketMotorManager))
                 .AddSingleton(typeof(RotorManager))
                 .AddSingleton(typeof(ButtonManager))
                 .AddSingleton(typeof(MotorEnablerManager))
@@ -59,6 +60,9 @@ namespace DiseqC
 
             var connectionMgr = (WiFiConnectionManager)services.GetRequiredService(typeof(WiFiConnectionManager));
             connectionMgr.ConnectOrStartAccessPoint(TimeSpan.FromSeconds(30));
+
+            var socketMgr = (SocketMotorManager)services.GetRequiredService(typeof(SocketMotorManager));
+            socketMgr.Start();
 
             using var webServer = new DiseqcWebServer(80, HttpProtocol.Http, new[] { typeof(DiseqcApiController), typeof(WifiSetupController), typeof(WebsiteController) }, services);
             webServer.Start();

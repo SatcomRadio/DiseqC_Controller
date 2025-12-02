@@ -36,9 +36,29 @@ namespace DiseqC.Manager
             _txChannel = new TransmitterChannel(txChannelSettings);
         }
 
+        public void TrackAndGoToAngle(float angle)
+        {
+            _motorEnabler.StartTracking();
+            _motorLed.SetState(true);
+            MoveToAngle(angle);
+        }
+
+        public void StopTracking()
+        {
+            _motorEnabler.StopTracking();
+            _motorLed.SetState(false);
+        }
+
         public void GotoAngle(float angle, int expectedTravelTimeSec)
         {
             _motorEnabler.TurnOnMotor(expectedTravelTimeSec);
+            _motorLed.BlinkDuring(expectedTravelTimeSec * 1000);
+
+            MoveToAngle(angle);
+        }
+
+        private void MoveToAngle(float angle)
+        {
             CurrentAngle = angle;
 
             angle = angle switch
@@ -47,8 +67,6 @@ namespace DiseqC.Manager
                 < MaxAngle * -1 => MaxAngle * -1,
                 _ => angle
             };
-
-            _motorLed.BlinkDuring(expectedTravelTimeSec * 1000);
 
             var n1 = angle < 0 ? (byte)0xE0 : (byte)0xD0;
 
